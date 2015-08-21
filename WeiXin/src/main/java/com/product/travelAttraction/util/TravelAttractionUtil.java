@@ -21,6 +21,8 @@ public class TravelAttractionUtil {
 	public static final String LOCATION_PIC = "http://api.map.baidu.com/staticimage?width=280&height=140&zoom=15&scale=2&";
 	
 	public static TravelAttraction getTravelAttractionInfo(String taName) throws IOException{
+		taName = taName.replaceAll("!", "");
+		taName = taName.replaceAll("！", "");
 		String taPyName = PinyinUtil.converterToSpell(taName);
 		JSONObject jsonData = WeiXinUtil.doGetStr("http://api.map.baidu.com/telematics/v3/travel_attractions?output=json&id="+taPyName+"&ak="+KeyConstant.BAIDU_AK);
 		TravelAttraction travelAttraction = new TravelAttraction();

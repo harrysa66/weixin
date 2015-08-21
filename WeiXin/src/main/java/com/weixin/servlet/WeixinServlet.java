@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.dom4j.DocumentException;
 
 import com.weixin.constant.FlagConstant;
@@ -20,6 +21,8 @@ import com.weixin.util.MessageUtil;
 import com.weixin.util.WeiXinUtil;
 
 public class WeixinServlet extends HttpServlet{
+	
+	static Logger log = Logger.getLogger(WeixinServlet.class.getName());
 	
 	/**
 	 * 
@@ -60,6 +63,7 @@ public class WeixinServlet extends HttpServlet{
 			if(null != user){
 				flag = user.getFlag();
 				if(MessageUtil.MESSAGE_TEXT.equals(msgType)){//文本消息
+					log.info("weixin_message_"+msgType+"---->"+content);
 					if(FlagConstant.ROBOT.equals(content) && flag.equals(FlagConstant.INIT)){//聊天
 						userDao.setFlag(fromUserName, FlagConstant.ROBOT);
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.robotMenu());
@@ -103,6 +107,7 @@ public class WeixinServlet extends HttpServlet{
 					}
 				}else if(MessageUtil.MESSAGE_VOICE.equals(msgType)){//语音消息
 					String recognition = map.get("Recognition");
+					log.info("weixin_message_"+msgType+"---->"+recognition);
 					if(flag.equals(FlagConstant.ROBOT)){
 						message = MessageUtil.robotInfo(toUserName, fromUserName, recognition);
 					}else if(flag.equals(FlagConstant.WEATHER)){
@@ -126,6 +131,7 @@ public class WeixinServlet extends HttpServlet{
 					}
 				}*/else if(MessageUtil.MESSAGE_EVENT.equals(msgType)){//事件推送消息
 					String eventType = map.get("Event");
+					log.info("weixin_message_"+msgType+"---->"+eventType);
 					if(MessageUtil.MESSAGE_EVENT_UNSUBSCRIBE.equals(eventType)){
 						userDao.deleteUser(fromUserName);
 					}
