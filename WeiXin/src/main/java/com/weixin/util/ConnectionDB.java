@@ -58,7 +58,7 @@ public class ConnectionDB {
     /** 
      * 密码 
      */  
-    private static final String USERPASSWORD = "12323211";  
+    private static final String USERPASSWORD = "ZXXcc123";  
     //private static final String USERPASSWORD = "9xVTxI-J97Bc";  
    //private static final String USERPASSWORD_LO = "12323211";//12323211,123456
   

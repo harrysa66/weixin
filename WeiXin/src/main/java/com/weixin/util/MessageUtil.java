@@ -391,6 +391,12 @@ public class MessageUtil {
 				Express express = ExpressUtil.getExpressInfo(expName, nu);
 				if(express.getStatus().equals("-2")){//查询失败
 					sb.append(express.getMsg());
+				}else if(express.getStatus().equals("-1")){
+					sb.append("待查询");
+				}else if(express.getStatus().equals("0")){
+					sb.append("查询异常");
+				}else if(express.getStatus().equals("1")){
+					sb.append("暂无记录");
 				}else if(!"".equals(express.getStatus())){//成功查询
 					if(null != express.getMsg() && !"".equals(express.getMsg())){
 						sb.append(express.getMsg());

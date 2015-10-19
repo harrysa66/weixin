@@ -40,7 +40,10 @@ public class ExpressUtil {
 			//得到快递单号信息
 			JSONObject expressInfoJson = WeiXinUtil.doGetStr("http://route.showapi.com/64-19?"+param+"com="+com+"&nu="+nu);
 			JSONObject tempJson = expressInfoJson.getJSONObject("showapi_res_body");
-			JSONArray expressArray = tempJson.getJSONArray("data");
+			JSONArray expressArray = new JSONArray();
+			if(tempJson.get("data") != null){
+				expressArray = tempJson.getJSONArray("data");
+			}
 			if(expressArray.size() > 0){
 				express.setExpTextName(expressJson.getJSONObject("showapi_res_body").getString("comName"));
 				express.setExpSpellName(tempJson.getString("expSpellName"));
@@ -61,8 +64,14 @@ public class ExpressUtil {
 				}
 				express.setExpressDataList(expressDataList);
 			}else{
+				String msg = "";
+				if(tempJson.get("message") != null){
+					msg = tempJson.getString("message");
+				}else if(tempJson.get("msg") != null){
+					msg = tempJson.getString("msg");
+				}
 				express.setStatus(tempJson.getString("status"));
-				express.setMsg(tempJson.getString("message"));
+				express.setMsg(msg);
 			}
 		}else{//快递不存在
 			express.setStatus("-2");
