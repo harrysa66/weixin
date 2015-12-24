@@ -1,15 +1,9 @@
 package com.weixin.util;
 
-import java.sql.CallableStatement;  
-import java.sql.Connection;  
-import java.sql.DriverManager;  
-import java.sql.PreparedStatement;  
-import java.sql.ResultSet;  
-import java.sql.SQLException;  
-
 import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+
+import java.sql.*;
 
 /** 
  * 数据库连接类 
@@ -46,21 +40,21 @@ public class ConnectionDB {
     private static final String URLSTR = "jdbc:mysql://localhost:3306/weixin";  
     //private static final String URLSTR = "jdbc:mysql://127.3.198.130:3306/jbossews";  
     //private static final String URLSTR_SSH = "jdbc:mysql://127.0.0.1:"+lport+"/jbossews";  
-    //private static final String URLSTR_LO = "jdbc:mysql://localhost:3306/weixin";  
+    private static final String URLSTR_LO = "jdbc:mysql://localhost:3306/weixin";
   
     /** 
      * 用户名 
      */  
     private static final String USERNAME = "root";  
     //private static final String USERNAME = "adminMYP82TU";  
-    //private static final String USERNAME_LO = "root";  
+    private static final String USERNAME_LO = "root";
   
     /** 
      * 密码 
      */  
     private static final String USERPASSWORD = "ZXXcc123";  
     //private static final String USERPASSWORD = "9xVTxI-J97Bc";  
-   //private static final String USERPASSWORD_LO = "12323211";//12323211,123456
+   private static final String USERPASSWORD_LO = "12323211";//12323211,123456
   
     /** 
      * 创建数据库连接对象 
@@ -93,9 +87,9 @@ public class ConnectionDB {
         	 // 加载数据库驱动程序  
             Class.forName(DRIVER);  
             // 获取连接  
-            connnection = DriverManager.getConnection(URLSTR,USERNAME,USERPASSWORD);  
+            //connnection = DriverManager.getConnection(URLSTR,USERNAME,USERPASSWORD);
             //connnection = DriverManager.getConnection(URLSTR,USERNAME,USERPASSWORD);  
-            //connnection = DriverManager.getConnection(URLSTR_LO,USERNAME_LO,USERPASSWORD_LO);  
+            connnection = DriverManager.getConnection(URLSTR_LO,USERNAME_LO,USERPASSWORD_LO);
         } catch (Exception e) {  
             System.out.println(e.getMessage());  
         }  
