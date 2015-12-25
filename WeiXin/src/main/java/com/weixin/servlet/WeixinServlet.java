@@ -1,24 +1,20 @@
 package com.weixin.servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Map;
+import com.weixin.constant.FlagConstant;
+import com.weixin.dao.UserDao;
+import com.weixin.po.User;
+import com.weixin.util.CheckUtil;
+import com.weixin.util.MessageUtil;
+import org.apache.log4j.Logger;
+import org.dom4j.DocumentException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-import org.dom4j.DocumentException;
-
-import com.weixin.constant.FlagConstant;
-import com.weixin.dao.UserDao;
-import com.weixin.po.User;
-import com.weixin.util.CheckUtil;
-import com.weixin.util.ConnectionDB;
-import com.weixin.util.MessageUtil;
-import com.weixin.util.WeiXinUtil;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
 
 public class WeixinServlet extends HttpServlet{
 	
@@ -64,6 +60,7 @@ public class WeixinServlet extends HttpServlet{
 				flag = user.getFlag();
 				if(MessageUtil.MESSAGE_TEXT.equals(msgType)){//文本消息
 					log.info("weixin_message_"+msgType+"---->"+content);
+					//进入功能
 					if(FlagConstant.ROBOT.equals(content) && flag.equals(FlagConstant.INIT)){//聊天
 						userDao.setFlag(fromUserName, FlagConstant.ROBOT);
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.robotMenu());
@@ -82,10 +79,15 @@ public class WeixinServlet extends HttpServlet{
 					}else if(FlagConstant.TRANS.equals(content) && flag.equals(FlagConstant.INIT)){//翻译
 						userDao.setFlag(fromUserName, FlagConstant.TRANS);
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.transMenu());
+					}else if(FlagConstant.SURROUNDING_SEARCH.equals(content) && flag.equals(FlagConstant.INIT)){//周边搜索
+						userDao.setFlag(fromUserName, FlagConstant.SURROUNDING_SEARCH);
+						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.surroundingSearchMenu());
 					}/*else if(FlagConstant.TRAFFIC.equals(content) && flag.equals(FlagConstant.INIT)){//交通
 						userDao.setFlag(fromUserName, FlagConstant.TRAFFIC);
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.trafficMenu());
-					}*/else if(FlagConstant.MENU_EN.equals(content) || FlagConstant.MENU_ZH.equals(content)){//主菜单
+					}*/
+					//使用功能
+					else if(FlagConstant.MENU_EN.equals(content) || FlagConstant.MENU_ZH.equals(content)){//主菜单
 						userDao.setFlag(fromUserName, FlagConstant.INIT);
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.menuText());
 					}else if(flag.equals(FlagConstant.ROBOT)){//聊天
@@ -96,10 +98,12 @@ public class WeixinServlet extends HttpServlet{
 						message = MessageUtil.newsWeatherInfo(toUserName, fromUserName, content);
 					}else if(flag.equals(FlagConstant.EXPRESS)){//快递
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.expressInfo(content));
-					}else if(flag.equals(FlagConstant.TRAVEL_ATTRACTION)){//经典
+					}else if(flag.equals(FlagConstant.TRAVEL_ATTRACTION)){//景点
 						message = MessageUtil.travelAttractionInfo(toUserName, fromUserName, content);
 					}else if(flag.equals(FlagConstant.TRANS)){//翻译
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.transInfo(content));
+					}else if(flag.equals(FlagConstant.SURROUNDING_SEARCH)){//周边搜索
+						message = MessageUtil.surroundingSearchInfo(toUserName, fromUserName, content);
 					}/*else if(flag.equals(FlagConstant.TRAFFIC)){//交通
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.trafficInfo(content));
 					}*/else{
@@ -118,18 +122,23 @@ public class WeixinServlet extends HttpServlet{
 						message = MessageUtil.travelAttractionInfo(toUserName, fromUserName, recognition);
 					}else if(flag.equals(FlagConstant.TRANS)){
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.transInfo(recognition));
+					}else if(flag.equals(FlagConstant.SURROUNDING_SEARCH)){
+						message = MessageUtil.surroundingSearchInfo(toUserName, fromUserName, recognition);
 					}/*else if(flag.equals(FlagConstant.TRAFFIC)){
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.trafficInfo(recognition));
 					}*/else{
 						message = MessageUtil.initText(toUserName, fromUserName, "请按照菜单提示发送语音信息，回复?调出主菜单！");
 					}
-				}/*else if(MessageUtil.MESSAGE_LOCATION.equals(msgType)){
-					String loX = map.get("Location_X");
-					String loY = map.get("Location_Y");
-					if(flag.equals(FlagConstant.TRAFFIC)){//交通
+				}else if(MessageUtil.MESSAGE_LOCATION.equals(msgType)){
+					String lng = map.get("Location_Y");
+					String lat = map.get("Location_X");
+					/*if(flag.equals(FlagConstant.TRAFFIC)){//交通
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.trafficInfo(loY+","+loX));
+					}*/
+					if(flag.equals(FlagConstant.SURROUNDING_SEARCH)){//周边搜索
+						message =  MessageUtil.surroundingSearchLocation(toUserName, fromUserName,lng,lat);
 					}
-				}*/else if(MessageUtil.MESSAGE_EVENT.equals(msgType)){//事件推送消息
+				}else if(MessageUtil.MESSAGE_EVENT.equals(msgType)){//事件推送消息
 					String eventType = map.get("Event");
 					log.info("weixin_message_"+msgType+"---->"+eventType);
 					if(MessageUtil.MESSAGE_EVENT_UNSUBSCRIBE.equals(eventType)){

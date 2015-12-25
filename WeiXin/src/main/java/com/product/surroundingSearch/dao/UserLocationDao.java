@@ -39,7 +39,7 @@ public class UserLocationDao extends BaseDao {
     public UserLocation getLastLocation(String openId){
         Object[] params = new Object[1];
         params[0] = openId;
-        String sql = "select id,open_id,lng,lat,bd09_lng,bd09_lat,create_time from user_location where open_id = ? order by create_time desc limit 0,1";
+        String sql = "select id,open_id as openId,lng,lat,bd09_lng as bd09Lng,bd09_lat as bd09Lat,create_time as createTime from user_location where open_id = ? order by create_time desc limit 0,1";
         UserLocation userLocation = (UserLocation)executeQueryObject(sql,UserLocation.class,params);
         return userLocation;
     }

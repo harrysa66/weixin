@@ -87,9 +87,9 @@ public class ConnectionDB {
         	 // 加载数据库驱动程序  
             Class.forName(DRIVER);  
             // 获取连接  
-            //connnection = DriverManager.getConnection(URLSTR,USERNAME,USERPASSWORD);
+            connnection = DriverManager.getConnection(URLSTR,USERNAME,USERPASSWORD);
             //connnection = DriverManager.getConnection(URLSTR,USERNAME,USERPASSWORD);  
-            connnection = DriverManager.getConnection(URLSTR_LO,USERNAME_LO,USERPASSWORD_LO);
+            //connnection = DriverManager.getConnection(URLSTR_LO,USERNAME_LO,USERPASSWORD_LO);
         } catch (Exception e) {  
             System.out.println(e.getMessage());  
         }  

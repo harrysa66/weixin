@@ -1,22 +1,5 @@
 package com.weixin.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
 import com.product.express.po.Express;
 import com.product.express.po.ExpressData;
 import com.product.express.util.ExpressUtil;
@@ -25,6 +8,7 @@ import com.product.robot.po.Flight;
 import com.product.robot.po.Robot;
 import com.product.robot.po.Train;
 import com.product.robot.util.RobotUtil;
+import com.product.surroundingSearch.util.SurroundingSearchUtil;
 import com.product.traffic.util.TrafficUtil;
 import com.product.trans.util.TransUtil;
 import com.product.travelAttraction.po.Attention;
@@ -34,19 +18,23 @@ import com.product.weather.po.Index;
 import com.product.weather.po.Weather;
 import com.product.weather.util.WeatherUtil;
 import com.thoughtworks.xstream.XStream;
-import com.weixin.po.message.Image;
-import com.weixin.po.message.ImageMessage;
-import com.weixin.po.message.Music;
-import com.weixin.po.message.MusicMessage;
-import com.weixin.po.message.News;
-import com.weixin.po.message.NewsMessage;
-import com.weixin.po.message.TextMessage;
+import com.weixin.po.message.*;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+import java.util.*;
 
 public class MessageUtil {
 	
 	public static final String MESSAGE_TEXT = "text";//文本消息
 	public static final String MESSAGE_IMAGE = "image";//图片消息
-	public static final String MESSAGE_NEWS = "news";//图片消息
+	public static final String MESSAGE_NEWS = "news";//图文消息
 	public static final String MESSAGE_VOICE = "voice";//语音消息
 	public static final String MESSAGE_MUSIC = "music";
 	public static final String MESSAGE_VIDEO = "video";//视频消息
@@ -222,7 +210,8 @@ public class MessageUtil {
 		sb.append("3、查询图文天气\n");
 		sb.append("4、查询快递（不支持语音）\n");
 		sb.append("5、查询景点\n");
-		sb.append("6、翻译\n\n");
+		sb.append("6、翻译\n");
+		sb.append("7、周边搜索\n\n");
 		//sb.append("7、查询交通\n\n");
 		sb.append("回复?调出此菜单，更多功能敬请期待");
 		return sb.toString();
@@ -696,6 +685,49 @@ public class MessageUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return message;
+	}
+
+	/**
+	 * 周边搜索信息
+	 * @return
+	 */
+	public static String surroundingSearchMenu(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("您是否有过出门在外四处找ATM或厕所的经历？").append("\n");
+		sb.append("您是否有过出差在外搜寻美食或娱乐场所的经历？").append("\n");
+		sb.append("周边搜索为您的出行保驾护航，为您提供专业的周边生活指南，发送位置开始体验吧！").append("\n\n");
+		sb.append("周边搜索使用说明").append("\n");
+		sb.append("1）发送地理位置").append("\n");
+		sb.append("点击窗口底部的“+”按钮，选择“位置”，点“发送”").append("\n");
+		sb.append("2）指定关键词搜索").append("\n");
+		sb.append("格式：关键词\n例如：酒店、银行").append("\n\n");
+		sb.append("回复?退出此模式并调出主菜单");
+		return sb.toString();
+	}
+
+	/**
+	 * 周边搜索结果
+	 * @param location
+	 * @return
+	 */
+	public static String surroundingSearchInfo(String toUserName,String fromUserName,String content){
+		String message = null;
+		try {
+			message = SurroundingSearchUtil.getSearchResult(toUserName,fromUserName,content);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return message;
+	}
+
+	public static String surroundingSearchLocation(String toUserName,String fromUserName,String lng,String lat){
+		String message = null;
+		try {
+			message = SurroundingSearchUtil.saveSearchLocation(toUserName,fromUserName,lng,lat);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return message;

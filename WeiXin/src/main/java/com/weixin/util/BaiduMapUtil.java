@@ -2,6 +2,8 @@ package com.weixin.util;
 
 import com.product.surroundingSearch.po.BaiduPlace;
 import com.product.surroundingSearch.po.UserLocation;
+import com.weixin.constant.Constant;
+import com.weixin.constant.KeyConstant;
 import com.weixin.po.message.News;
 import it.sauronsoftware.base64.Base64;
 import net.sf.json.JSONObject;
@@ -25,31 +27,31 @@ import java.util.List;
 public class BaiduMapUtil {
 
     /**
-     * Ô²ĞÎÇøÓò¼ìË÷
+     * åœ†å½¢åŒºåŸŸæ£€ç´¢
      *
-     * @param query ¼ìË÷¹Ø¼ü´Ê
-     * @param lng   ¾­¶È
-     * @param lat   Î³¶È
+     * @param query æ£€ç´¢å…³é”®è¯
+     * @param lng   ç»åº¦
+     * @param lat   çº¬åº¦
      * @return List<BaiduPlace>
      * @throws UnsupportedEncodingException
      */
     public static List<BaiduPlace> searchPlace(String query, String lng, String lat) throws Exception {
-        // Æ´×°ÇëÇóµØÖ·
-        String requestUrl = "http://api.map.baidu.com/place/v2/search?&query=QUERY&location=LAT,LNG&radius=2000&output=xml&scope=2&page_size=10&page_num=0&ak=CA21bdecc75efc1664af5a195c30bb4e";
+        // æ‹¼è£…è¯·æ±‚åœ°å€
+        String requestUrl = "http://api.map.baidu.com/place/v2/search?&query=QUERY&location=LAT,LNG&radius=2000&output=xml&scope=2&page_size=10&page_num=0&ak="+ KeyConstant.BAIDU_AK;
         requestUrl = requestUrl.replace("QUERY", URLEncoder.encode(query, "UTF-8"));
         requestUrl = requestUrl.replace("LAT", lat);
         requestUrl = requestUrl.replace("LNG", lng);
-        // µ÷ÓÃPlace APIÔ²ĞÎÇøÓò¼ìË÷
+        // è°ƒç”¨Place APIåœ†å½¢åŒºåŸŸæ£€ç´¢
         String respXml = httpRequest(requestUrl);
-        // ½âÎö·µ»ØµÄxml
+        // è§£æè¿”å›çš„xml
         List<BaiduPlace> placeList = parsePlaceXml(respXml);
         return placeList;
     }
 
     /**
-     * ·¢ËÍhttpÇëÇó
+     * å‘é€httpè¯·æ±‚
      *
-     * @param requestUrl ÇëÇóµØÖ·
+     * @param requestUrl è¯·æ±‚åœ°å€
      * @return String
      */
     public static String httpRequest(String requestUrl) {
@@ -61,7 +63,7 @@ public class BaiduMapUtil {
             httpUrlConn.setRequestMethod("GET");
             httpUrlConn.connect();
 
-            // ½«·µ»ØµÄÊäÈëÁ÷×ª»»³É×Ö·û´®
+            // å°†è¿”å›çš„è¾“å…¥æµè½¬æ¢æˆå­—ç¬¦ä¸²
             InputStream inputStream = httpUrlConn.getInputStream();
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -71,7 +73,7 @@ public class BaiduMapUtil {
             }
             bufferedReader.close();
             inputStreamReader.close();
-            // ÊÍ·Å×ÊÔ´
+            // é‡Šæ”¾èµ„æº
             inputStream.close();
             inputStream = null;
             httpUrlConn.disconnect();
@@ -82,9 +84,9 @@ public class BaiduMapUtil {
     }
 
     /**
-     * ¸ù¾İ°Ù¶ÈµØÍ¼·µ»ØµÄÁ÷½âÎö³öµØÖ·ĞÅÏ¢
+     * æ ¹æ®ç™¾åº¦åœ°å›¾è¿”å›çš„æµè§£æå‡ºåœ°å€ä¿¡æ¯
      *
-     * @param inputStream ÊäÈëÁ÷
+     * @param inputStream è¾“å…¥æµ
      * @return List<BaiduPlace>
      */
     @SuppressWarnings("unchecked")
@@ -92,28 +94,28 @@ public class BaiduMapUtil {
         List<BaiduPlace> placeList = null;
         try {
             Document document = DocumentHelper.parseText(xml);
-            // µÃµ½xml¸ùÔªËØ
+            // å¾—åˆ°xmlæ ¹å…ƒç´ 
             Element root = document.getRootElement();
-            // ´Ó¸ùÔªËØ»ñÈ¡<results>
+            // ä»æ ¹å…ƒç´ è·å–<results>
             Element resultsElement = root.element("results");
-            // ´Ó<results>ÖĞ»ñÈ¡<result>¼¯ºÏ
+            // ä»<results>ä¸­è·å–<result>é›†åˆ
             List<Element> resultElementList = resultsElement.elements("result");
-            // ÅĞ¶Ï<result>¼¯ºÏµÄ´óĞ¡
+            // åˆ¤æ–­<result>é›†åˆçš„å¤§å°
             if (resultElementList.size() > 0) {
                 placeList = new ArrayList<BaiduPlace>();
-                // POIÃû³Æ
+                // POIåç§°
                 Element nameElement = null;
-                // POIµØÖ·ĞÅÏ¢
+                // POIåœ°å€ä¿¡æ¯
                 Element addressElement = null;
-                // POI¾­Î³¶È×ø±ê
+                // POIç»çº¬åº¦åæ ‡
                 Element locationElement = null;
-                // POIµç»°ĞÅÏ¢
+                // POIç”µè¯ä¿¡æ¯
                 Element telephoneElement = null;
-                // POIÀ©Õ¹ĞÅÏ¢
+                // POIæ‰©å±•ä¿¡æ¯
                 Element detailInfoElement = null;
-                // ¾àÀëÖĞĞÄµãµÄ¾àÀë
+                // è·ç¦»ä¸­å¿ƒç‚¹çš„è·ç¦»
                 Element distanceElement = null;
-                // ±éÀú<result>¼¯ºÏ
+                // éå†<result>é›†åˆ
                 for (Element resultElement : resultElementList) {
                     nameElement = resultElement.element("name");
                     addressElement = resultElement.element("address");
@@ -126,10 +128,10 @@ public class BaiduMapUtil {
                     place.setAddress(addressElement.getText());
                     place.setLng(locationElement.element("lng").getText());
                     place.setLat(locationElement.element("lat").getText());
-                    // µ±<telephone>ÔªËØ´æÔÚÊ±»ñÈ¡µç»°ºÅÂë
+                    // å½“<telephone>å…ƒç´ å­˜åœ¨æ—¶è·å–ç”µè¯å·ç 
                     if (null != telephoneElement)
                         place.setTelephone(telephoneElement.getText());
-                    // µ±<detail_info>ÔªËØ´æÔÚÊ±»ñÈ¡<distance>
+                    // å½“<detail_info>å…ƒç´ å­˜åœ¨æ—¶è·å–<distance>
                     if (null != detailInfoElement) {
                         distanceElement = detailInfoElement.element("distance");
                         if (null != distanceElement)
@@ -137,7 +139,7 @@ public class BaiduMapUtil {
                     }
                     placeList.add(place);
                 }
-                // °´¾àÀëÓÉ½ü¼°Ô¶ÅÅĞò
+                // æŒ‰è·ç¦»ç”±è¿‘åŠè¿œæ’åº
                 Collections.sort(placeList);
             }
         } catch (Exception e) {
@@ -147,25 +149,25 @@ public class BaiduMapUtil {
     }
 
     /**
-     * ¸ù¾İPlace×é×°Í¼ÎÄÁĞ±í
+     * æ ¹æ®Placeç»„è£…å›¾æ–‡åˆ—è¡¨
      *
      * @param placeList
-     * @param bd09Lng   ¾­¶È
-     * @param bd09Lat   Î³¶È
+     * @param bd09Lng   ç»åº¦
+     * @param bd09Lat   çº¬åº¦
      * @return List<News>
      */
     public static List<News> makeArticleList(List<BaiduPlace> placeList, String bd09Lng, String bd09Lat) {
-        // ÏîÄ¿µÄ¸ùÂ·¾¶
-        String basePath = "http://0.weixinmptest.duapp.com/";
+        // é¡¹ç›®çš„æ ¹è·¯å¾„
+        String basePath = Constant.BASE_PATH;
         List<News> list = new ArrayList<News>();
         BaiduPlace place = null;
         for (int i = 0; i < placeList.size(); i++) {
             place = placeList.get(i);
             News news = new News();
-            news.setTitle(place.getName() + "\n¾àÀëÔ¼" + place.getDistance() + "Ã×");
-            // P1±íÊ¾ÓÃ»§·¢ËÍµÄÎ»ÖÃ£¨×ø±ê×ª»»ºó£©£¬p2±íÊ¾µ±Ç°POIËùÔÚÎ»ÖÃ
+            news.setTitle(place.getName() + "\nè·ç¦»çº¦" + place.getDistance() + "ç±³");
+            // P1è¡¨ç¤ºç”¨æˆ·å‘é€çš„ä½ç½®ï¼ˆåæ ‡è½¬æ¢åï¼‰ï¼Œp2è¡¨ç¤ºå½“å‰POIæ‰€åœ¨ä½ç½®
             news.setUrl(String.format(basePath + "route.jsp?p1=%s,%s&p2=%s,%s", bd09Lng, bd09Lat, place.getLng(), place.getLat()));
-            // ½«Ê×ÌõÍ¼ÎÄµÄÍ¼Æ¬ÉèÖÃÎª´óÍ¼
+            // å°†é¦–æ¡å›¾æ–‡çš„å›¾ç‰‡è®¾ç½®ä¸ºå¤§å›¾
             if (i == 0)
                 news.setPicUrl(basePath + "images/poisearch.png");
             else
@@ -176,14 +178,14 @@ public class BaiduMapUtil {
     }
 
     /**
-     * ½«Î¢ĞÅ¶¨Î»µÄ×ø±ê×ª»»³É°Ù¶È×ø±ê£¨GCJ-02 -> Baidu£©
+     * å°†å¾®ä¿¡å®šä½çš„åæ ‡è½¬æ¢æˆç™¾åº¦åæ ‡ï¼ˆGCJ-02 -> Baiduï¼‰
      *
-     * @param lng ¾­¶È
-     * @param lat Î³¶È
+     * @param lng ç»åº¦
+     * @param lat çº¬åº¦
      * @return UserLocation
      */
     public static UserLocation convertCoord(String lng, String lat) {
-        // °Ù¶È×ø±ê×ª»»½Ó¿Ú
+        // ç™¾åº¦åæ ‡è½¬æ¢æ¥å£
         String convertUrl = "http://api.map.baidu.com/ag/coord/convert?from=2&to=4&x={x}&y={y}";
         convertUrl = convertUrl.replace("{x}", lng);
         convertUrl = convertUrl.replace("{y}", lat);
@@ -192,7 +194,7 @@ public class BaiduMapUtil {
         try {
             String jsonCoord = httpRequest(convertUrl);
             JSONObject jsonObject = JSONObject.fromObject(jsonCoord);
-            // ¶Ô×ª»»ºóµÄ×ø±ê½øĞĞBase64½âÂë
+            // å¯¹è½¬æ¢åçš„åæ ‡è¿›è¡ŒBase64è§£ç 
             location.setBd09Lng(Base64.decode(jsonObject.getString("x"), "UTF-8"));
             location.setBd09Lat(Base64.decode(jsonObject.getString("y"), "UTF-8"));
         } catch (Exception e) {
