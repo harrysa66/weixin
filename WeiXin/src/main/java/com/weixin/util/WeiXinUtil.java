@@ -143,7 +143,7 @@ public class WeiXinUtil {
 		String BOUNDARY = "----------" + System.currentTimeMillis();
 		con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
 
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("--");
 		sb.append(BOUNDARY);
 		sb.append("\r\n");

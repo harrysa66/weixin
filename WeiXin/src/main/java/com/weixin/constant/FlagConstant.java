@@ -12,6 +12,7 @@ public class FlagConstant {
 	public static final String TRAVEL_ATTRACTION = "5";//景点
 	public static final String TRANS = "6";//翻译
 	public static final String SURROUNDING_SEARCH = "7";//周边搜索
+	public static final String GUESS_NUMBER = "8";//猜数字游戏
 	//public static final String TRAFFIC = "7";
 	
 	

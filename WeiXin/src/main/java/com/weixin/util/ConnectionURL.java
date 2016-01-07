@@ -18,7 +18,7 @@ public class ConnectionURL {
 	
 	 public static JSONObject getConnectionData(String urlInfo,Integer timeout,String method,String propertyKey,String propertyValue) throws IOException{
 		HttpURLConnection connection; 
-	    StringBuilder sb = null; 
+	    StringBuffer sb = null;
 	    BufferedReader br;// 读取data数据流 
 	    URL url = new URL(urlInfo); 
 	    connection = (HttpURLConnection)url.openConnection(); 
@@ -35,7 +35,7 @@ public class ConnectionURL {
 	    }
 	    try { 
 	        br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8")); 
-	        sb = new StringBuilder(); 
+	        sb = new StringBuffer();
 	        String line = null; 
 	        while ((line = br.readLine()) != null) 
 	            sb.append(line); 

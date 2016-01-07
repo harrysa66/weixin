@@ -82,6 +82,9 @@ public class WeixinServlet extends HttpServlet{
 					}else if(FlagConstant.SURROUNDING_SEARCH.equals(content) && flag.equals(FlagConstant.INIT)){//周边搜索
 						userDao.setFlag(fromUserName, FlagConstant.SURROUNDING_SEARCH);
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.surroundingSearchMenu());
+					}else if(FlagConstant.GUESS_NUMBER.equals(content) && flag.equals(FlagConstant.INIT)){//猜数字游戏
+						userDao.setFlag(fromUserName, FlagConstant.GUESS_NUMBER);
+						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.guessNumberMenu());
 					}/*else if(FlagConstant.TRAFFIC.equals(content) && flag.equals(FlagConstant.INIT)){//交通
 						userDao.setFlag(fromUserName, FlagConstant.TRAFFIC);
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.trafficMenu());
@@ -104,6 +107,8 @@ public class WeixinServlet extends HttpServlet{
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.transInfo(content));
 					}else if(flag.equals(FlagConstant.SURROUNDING_SEARCH)){//周边搜索
 						message = MessageUtil.surroundingSearchInfo(toUserName, fromUserName, content);
+					}else if(flag.equals(FlagConstant.GUESS_NUMBER)){//猜数字游戏
+						message = MessageUtil.guessNumberInfo(toUserName, fromUserName, content);
 					}/*else if(flag.equals(FlagConstant.TRAFFIC)){//交通
 						message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.trafficInfo(content));
 					}*/else{

@@ -78,7 +78,7 @@ public class SurroundingSearchUtil {
         // 保存用户地理位置
         userLocationDao.saveUserLocation(fromUserName, lng, lat, bd09Lng, bd09Lat);
 
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         sb.append("[愉快]").append("成功接收您的位置，位置信息的有效期为30分钟！").append("\n\n");
         sb.append("您可以输入搜索关键词获取周边信息了，例如：").append("\n");
         sb.append("        酒店").append("\n");
@@ -92,7 +92,7 @@ public class SurroundingSearchUtil {
      * @return
      */
     public static String getUsage() {
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         sb.append("周边搜索使用说明").append("\n");
         sb.append("1）发送地理位置").append("\n");
         sb.append("点击窗口底部的“+”按钮，选择“位置”，点“发送”").append("\n");

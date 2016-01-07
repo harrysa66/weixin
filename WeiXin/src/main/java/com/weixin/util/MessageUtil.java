@@ -3,6 +3,7 @@ package com.weixin.util;
 import com.product.express.po.Express;
 import com.product.express.po.ExpressData;
 import com.product.express.util.ExpressUtil;
+import com.product.guessNumber.util.GuessNumberUtil;
 import com.product.robot.po.CookBook;
 import com.product.robot.po.Flight;
 import com.product.robot.po.Robot;
@@ -203,7 +204,7 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String menuText(){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("欢迎您的关注，在这里您可以与机器人小R进行聊天或者查阅生活服务信息，请按照菜单提示进行操作：\n\n");
 		sb.append("1、聊天\n");
 		sb.append("2、查询天气\n");
@@ -211,7 +212,8 @@ public class MessageUtil {
 		sb.append("4、查询快递（不支持语音）\n");
 		sb.append("5、查询景点\n");
 		sb.append("6、翻译\n");
-		sb.append("7、周边搜索\n\n");
+		sb.append("7、周边搜索\n");
+		sb.append("8、猜数字游戏\n\n");
 		//sb.append("7、查询交通\n\n");
 		sb.append("回复?调出此菜单，更多功能敬请期待");
 		return sb.toString();
@@ -222,7 +224,7 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String weatherMenu(){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("进入查询天气模式，请输入“城市名称”进行查询，例如“天津”\n\n");
 		sb.append("回复?退出此模式并调出主菜单");
 		return sb.toString();
@@ -234,7 +236,7 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String weatherInfo(String city){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		Weather weather = null;
 		try {
 			weather = WeatherUtil.getWeather(city);
@@ -273,7 +275,7 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String newsWeatherMenu(){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("进入查询图文天气模式，请输入“城市名称”进行查询，例如“天津”\n\n");
 		sb.append("回复?退出此模式并调出主菜单");
 		return sb.toString();
@@ -291,21 +293,21 @@ public class MessageUtil {
 		List<News> newsList = new ArrayList<News>();
 		Weather weather = null;
 		News news = null;
-		StringBuilder sb = null;
+		StringBuffer sb = null;
 		try {
 			weather = WeatherUtil.getWeather(city);
 			if(weather.getStatus().equals(WeatherUtil.ERROR_NO_RESULT)){
 				message = initText(toUserName, fromUserName, "请输入正确的城市名称！");
 			}else if(weather.getStatus().equals(WeatherUtil.ERROR_OK)){
 				news = new News();
-				sb = new StringBuilder();
+				sb = new StringBuffer();
 				sb.append("当前时间：").append(weather.getDate()).append("\n");
 				sb.append(weather.getCurrentCity()).append("天气预报");
 				news.setTitle(sb.toString());
 				newsList.add(news);
 				
 				news = new News();
-				sb = new StringBuilder();
+				sb = new StringBuffer();
 				sb.append(weather.getWeatherDataList().get(0).getDate()).append("\n");
 				sb.append(weather.getWeatherDataList().get(0).getWeather()).append("\t");
 				sb.append(weather.getWeatherDataList().get(0).getWind()).append("\t");
@@ -323,7 +325,7 @@ public class MessageUtil {
 				newsList.add(news);
 				
 				news = new News();
-				sb = new StringBuilder();
+				sb = new StringBuffer();
 				for(Index index : weather.getIndexList()){
 					
 					sb.append(index.getTipt()).append("：").append(index.getZs()).append("\n");
@@ -334,7 +336,7 @@ public class MessageUtil {
 				
 				for(int i = 1 ; i < weather.getWeatherDataList().size() ; i++){
 					news = new News();
-					sb = new StringBuilder();
+					sb = new StringBuffer();
 					sb.append(weather.getWeatherDataList().get(i).getDate()).append("\n");
 					sb.append(weather.getWeatherDataList().get(i).getWeather()).append("\t");
 					sb.append(weather.getWeatherDataList().get(i).getWind()).append("\t");
@@ -358,7 +360,7 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String expressMenu(){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("进入查询快递模式，请输入“快递名称,快递单号”进行查询，例如“汇通,350342680333”\n\n");
 		sb.append("回复?退出此模式并调出主菜单");
 		return sb.toString();
@@ -370,7 +372,7 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String expressInfo(String content){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		content=content.replaceAll("，", ",");
 		String[] contents = content.split(",");
 		if(contents.length == 2){
@@ -416,7 +418,7 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String travelAttractionMenu(){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("进入查询景点模式，请输入“景点名称”进行查询，例如“颐和园”\n\n");
 		sb.append("回复?退出此模式并调出主菜单");
 		return sb.toString();
@@ -434,14 +436,14 @@ public class MessageUtil {
 		List<News> newsList = new ArrayList<News>();
 		TravelAttraction travelAttraction = null;
 		News news = null;
-		StringBuilder sb = null;
+		StringBuffer sb = null;
 		try {
 			travelAttraction = TravelAttractionUtil.getTravelAttractionInfo(taName);
 			if(travelAttraction.getStatus().equals(TravelAttractionUtil.ERROR_NO_RESULT)){
 				message = initText(toUserName, fromUserName, "请输入正确的景点名称或景点不存在！");
 			}else if(travelAttraction.getStatus().equals(TravelAttractionUtil.ERROR_OK)){
 				news = new News();
-				sb = new StringBuilder();
+				sb = new StringBuffer();
 				sb.append(travelAttraction.getName());
 				news.setTitle(sb.toString());
 				news.setDescription(travelAttraction.getAbstracts());
@@ -450,7 +452,7 @@ public class MessageUtil {
 				newsList.add(news);
 				
 				news = new News();
-				sb = new StringBuilder();
+				sb = new StringBuffer();
 				sb.append("简介：").append(travelAttraction.getDescription());
 				news.setTitle(sb.toString());
 				news.setUrl(travelAttraction.getUrl());
@@ -458,7 +460,7 @@ public class MessageUtil {
 				
 				if(null != travelAttraction.getPrice()){
 					news = new News();
-					sb = new StringBuilder();
+					sb = new StringBuffer();
 					sb.append("票价：").append(travelAttraction.getPrice());
 					news.setTitle(sb.toString());
 					news.setUrl(travelAttraction.getUrl());
@@ -467,7 +469,7 @@ public class MessageUtil {
 				
 				if(null != travelAttraction.getOpenTime()){
 					news = new News();
-					sb = new StringBuilder();
+					sb = new StringBuffer();
 					sb.append("开放时间：").append(travelAttraction.getOpenTime());
 					news.setTitle(sb.toString());
 					news.setUrl(travelAttraction.getUrl());
@@ -476,7 +478,7 @@ public class MessageUtil {
 				
 				if(null != travelAttraction.getAttentionList()){
 					news = new News();
-					sb = new StringBuilder();
+					sb = new StringBuffer();
 					sb.append("更多事项：").append("\n");
 					for(Attention attention : travelAttraction.getAttentionList()){
 						sb.append(attention.getName()).append("\n");
@@ -501,7 +503,7 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String transMenu(){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("进入翻译模式，请输入“需翻译的内容”进行翻译，例如“家庭”，“family”，“我们是一家人”，“we are family”\n\n");
 		sb.append("回复?退出此模式并调出主菜单");
 		return sb.toString();
@@ -529,7 +531,7 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String robotMenu(){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("进入聊天模式，直接发消息便可与小R机器人进行聊天，它可以陪你聊天并且具有很多功能等待你发现\n\n");
 		sb.append("回复?退出此模式并调出主菜单");
 		return sb.toString();
@@ -547,11 +549,11 @@ public class MessageUtil {
 		String message = null;
 		List<News> newsList = null;
 		News news = null;
-		StringBuilder sb = null;
+		StringBuffer sb = null;
 		Robot<Object> robot = RobotUtil.getRobotInfo(fromUserName,info);
 		if(null != robot.getCode() && !"".equals(robot.getCode())){
 			if(robot.getCode().equals(RobotUtil.TEXT_CODE)){
-				sb = new StringBuilder();
+				sb = new StringBuffer();
 				sb.append(robot.getText());
 				message = initText(toUserName, fromUserName, sb.toString());
 			}else if(robot.getCode().equals(RobotUtil.URL_CODE)){
@@ -590,7 +592,7 @@ public class MessageUtil {
 				Train[] train = (Train[]) robot.getList();
 				for(int i = 0 ; i< 9 ; i++){
 					news = new News();
-					sb = new StringBuilder();
+					sb = new StringBuffer();
 					sb.append(train[i].getTrainnum()).append("\n");
 					sb.append(train[i].getStart()).append("\t-\t").append(train[i].getTerminal()).append("\n");
 					sb.append(train[i].getStarttime()).append("\t-\t").append(train[i].getEndtime());
@@ -613,7 +615,7 @@ public class MessageUtil {
 				Flight[] flight = (Flight[]) robot.getList();
 				for(int i = 0 ; i< 9 ; i++){
 					news = new News();
-					sb = new StringBuilder();
+					sb = new StringBuffer();
 					sb.append(flight[i].getFlight()).append("\n");
 					sb.append(flight[i].getRoute()).append("\n");
 					sb.append(flight[i].getStarttime()).append("\t-\t").append(flight[i].getEndtime()).append("\n");
@@ -637,7 +639,7 @@ public class MessageUtil {
 				CookBook[] cook = (CookBook[]) robot.getList();
 				for(int i = 0 ; i< 9 ; i++){
 					news = new News();
-					sb = new StringBuilder();
+					sb = new StringBuffer();
 					sb.append(cook[i].getName()).append("\n");
 					sb.append(cook[i].getInfo());
 					news.setTitle(sb.toString());
@@ -650,7 +652,7 @@ public class MessageUtil {
 				}
 				message = initNewsMessage(toUserName, fromUserName, newsList);
 			}else{
-				sb = new StringBuilder();
+				sb = new StringBuffer();
 				sb.append(robot.getText());
 				message = initText(toUserName, fromUserName, sb.toString());
 			}
@@ -665,7 +667,7 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String trafficMenu(){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("进入查询交通模式，请输入“城市名称”进行查询，例如“天津”，也可以发送地理位置信息进行查询。（因为微信字数限制，只显示部分信息）\n\n");
 		sb.append("回复?退出此模式并调出主菜单");
 		return sb.toString();
@@ -695,7 +697,7 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String surroundingSearchMenu(){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("您是否有过出门在外四处找ATM或厕所的经历？").append("\n");
 		sb.append("您是否有过出差在外搜寻美食或娱乐场所的经历？").append("\n");
 		sb.append("周边搜索为您的出行保驾护航，为您提供专业的周边生活指南，发送位置开始体验吧！").append("\n\n");
@@ -723,10 +725,51 @@ public class MessageUtil {
 		return message;
 	}
 
+	/**
+	 * 接收并保存位置信息
+	 * @param toUserName
+	 * @param fromUserName
+	 * @param lng
+	 * @param lat
+	 * @return
+	 */
 	public static String surroundingSearchLocation(String toUserName,String fromUserName,String lng,String lat){
 		String message = null;
 		try {
 			message = SurroundingSearchUtil.saveSearchLocation(toUserName,fromUserName,lng,lat);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return message;
+	}
+
+	/**
+	 * 猜数字游戏信息
+	 * @return
+	 */
+	public static String guessNumberMenu() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("《猜数字游戏玩法》").append("\n");
+		sb.append("系统设定一个没有重复数字的n（n ≥ 4）位数，由玩家来猜，每局10次机会。").append("\n");
+		sb.append("每猜一次，系统会给出猜测结果xAyB，x表示数字与位置均正确的数的个数，y表示数字正确但位置不对的数的个数。").append("\n");
+		sb.append("玩家根据猜测结果xAyB一直猜，直到猜中(nA0B)为止。").append("\n");
+		sb.append("如果10次都没猜中，系统会公布答案，游戏结束。").append("\n");
+		sb.append("玩家任意输入一个没有重复数字的n（n ≥ 4）位数即开始游戏，例如：7890").append("\n\n");
+		sb.append("回复?退出此模式并调出主菜单");
+		return sb.toString();
+	}
+
+	/**
+	 * 进行猜数字游戏
+	 * @param toUserName
+	 * @param fromUserName
+	 * @param content
+	 * @return
+	 */
+	public static String guessNumberInfo(String toUserName, String fromUserName, String content) {
+		String message = null;
+		try {
+			message = GuessNumberUtil.processGame(toUserName, fromUserName, content);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -738,9 +781,9 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static String otherMenu(){
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("这里是其他信息测试...");
 		return sb.toString();
 	}
-	
+
 }

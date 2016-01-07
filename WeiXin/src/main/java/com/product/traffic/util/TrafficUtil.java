@@ -26,7 +26,7 @@ public class TrafficUtil {
 		String url = "http://api.map.baidu.com/telematics/v3/trafficEvent?location=LOCATION&output=json&ak="+KeyConstant.BAIDU_AK;
 		url = url.replace("LOCATION", URLEncoder.encode(location, "UTF-8"));
 		JSONObject jsonObject = WeiXinUtil.doGetStr(url);
-		StringBuilder message = new StringBuilder();
+		StringBuffer message = new StringBuffer();
 		Traffic traffic = (Traffic) JSONObject.toBean(jsonObject, Traffic.class);
 		if(traffic.getError().equals(STATUS_0)){
 			//message.append("当前城市：").append(traffic.getCurrentCity()).append("\n");

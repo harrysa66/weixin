@@ -1,16 +1,11 @@
 package com.weixin.dao;
 
+import com.weixin.util.ConnectionDB;
+
 import java.lang.reflect.Field;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.weixin.po.User;
-import com.weixin.util.ConnectionDB;
 
 public class BaseDao {
 	
@@ -159,7 +154,8 @@ public class BaseDao {
             		field.set(object, rs.getObject(field.getName()));
             	}
             }
-        } catch (Exception e) {  
+        } catch (Exception e) {
+            object = null;
             System.out.println(e.getMessage());  
         } finally {  
             // 关闭所有资源  
@@ -176,7 +172,7 @@ public class BaseDao {
      * @return List 
      *                       结果集 
      */  
-    public List excuteQuery(String sql, Class clazz, Object[] params) {  
+    public List executeQuery(String sql, Class clazz, Object[] params) {
         // 执行SQL获得结果集  
         ResultSet rs = executeQueryRS(sql, params);  
         // 创建List  
@@ -210,7 +206,7 @@ public class BaseDao {
      * @param SqlType 输出参数类型 
      * @return 输出参数的值 
      */  
-    public Object excuteQuery(String sql, Object[] params,int outParamPos, int SqlType) {  
+    public Object executeQuery(String sql, Object[] params,int outParamPos, int SqlType) {
         Object object = null;  
         connnection = db.getConnection();  
         try {  

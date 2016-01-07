@@ -1,19 +1,14 @@
 package com.product.robot.util;
 
+import com.product.robot.po.*;
+import com.weixin.constant.KeyConstant;
+import com.weixin.util.WeiXinUtil;
+import net.sf.json.JSONObject;
+
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-
-import net.sf.json.JSONObject;
-
-import com.product.robot.po.CookBook;
-import com.product.robot.po.Flight;
-import com.product.robot.po.News;
-import com.product.robot.po.Robot;
-import com.product.robot.po.Train;
-import com.weixin.constant.KeyConstant;
-import com.weixin.util.WeiXinUtil;
 
 public class RobotUtil {
 	
@@ -25,8 +20,8 @@ public class RobotUtil {
 	public static final String COOK_CODE = "308000";
 	public static final String EMPTY_CODE = "40002";
 	
-	public static final String DOMAIN = "http://harrysa66.tunnel.mobi";
-	//public static final String DOMAIN = "http://www.hebingqing.cn";
+	//public static final String DOMAIN = "http://harrysa66.tunnel.mobi";
+	public static final String DOMAIN = "http://www.hebingqing.cn";
 	public static final String IMAGE_LOC = "/WeiXin/weixin_image";
 	
 	public static final String NEWS_IMAGE = DOMAIN+IMAGE_LOC+"/weixin-xinwen.png";
