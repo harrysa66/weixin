@@ -750,11 +750,11 @@ public class MessageUtil {
 	public static String guessNumberMenu() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("《猜数字游戏玩法》").append("\n");
-		sb.append("系统设定一个没有重复数字的n（n ≥ 4）位数，由玩家来猜，每局10次机会。").append("\n");
+		sb.append("系统设定一个没有重复数字的n（n ≥ 1）位数，由玩家来猜，每局10次机会。").append("\n");
 		sb.append("每猜一次，系统会给出猜测结果xAyB，x表示数字与位置均正确的数的个数，y表示数字正确但位置不对的数的个数。").append("\n");
 		sb.append("玩家根据猜测结果xAyB一直猜，直到猜中(nA0B)为止。").append("\n");
 		sb.append("如果10次都没猜中，系统会公布答案，游戏结束。").append("\n");
-		sb.append("玩家任意输入一个没有重复数字的n（n ≥ 4）位数即开始游戏，例如：7890").append("\n\n");
+		sb.append("玩家任意输入一个没有重复数字的n（n ≥ 1）位数即开始游戏，例如：7890").append("\n\n");
 		sb.append("回复?退出此模式并调出主菜单");
 		return sb.toString();
 	}

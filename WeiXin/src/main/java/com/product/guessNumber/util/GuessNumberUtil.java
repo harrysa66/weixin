@@ -39,13 +39,13 @@ public class GuessNumberUtil {
         else if (content.equalsIgnoreCase("end")) {
             message = MessageUtil.initText(toUserName, fromUserName, endGame(fromUserName));
         }
-        // 如果是n（n ≥ 4）位数字并且无重复
+        // 如果是n（n ≥ 1）位数字并且无重复
         else if (GameUtil.verifyNumber(content,content.length()) && !GameUtil.verifyRepeat(content)) {
             message = MessageUtil.initText(toUserName, fromUserName, process(fromUserName,content));
         }
         // 输入的格式错误
         else {
-            message = MessageUtil.initText(toUserName, fromUserName, "请输入n（n ≥ 4）个不重复的数字，例如：0269");
+            message = MessageUtil.initText(toUserName, fromUserName, "请输入n（n ≥ 1）个不重复的数字，例如：0269");
         }
         return message;
     }
@@ -58,11 +58,11 @@ public class GuessNumberUtil {
     private static String getGameRule() {
         StringBuffer sb = new StringBuffer();
         sb.append("《猜数字游戏玩法》").append("\n");
-        sb.append("系统设定一个没有重复数字的n（n ≥ 4）位数，由玩家来猜，每局10次机会。").append("\n");
+        sb.append("系统设定一个没有重复数字的n（n ≥ 1）位数，由玩家来猜，每局10次机会。").append("\n");
         sb.append("每猜一次，系统会给出猜测结果xAyB，x表示数字与位置均正确的数的个数，y表示数字正确但位置不对的数的个数。").append("\n");
         sb.append("玩家根据猜测结果xAyB一直猜，直到猜中(nA0B)为止。").append("\n");
         sb.append("如果10次都没猜中，系统会公布答案，游戏结束。").append("\n");
-        sb.append("玩家任意输入一个没有重复数字的n（n ≥ 4）位数即开始游戏，例如：7890").append("\n\n");
+        sb.append("玩家任意输入一个没有重复数字的n（n ≥ 1）位数即开始游戏，例如：7890").append("\n\n");
         return sb.toString();
     }
 
@@ -77,7 +77,7 @@ public class GuessNumberUtil {
         List<UserScore> scoreList = gameDao.getScoreByOpenId(openId);
         if (null == scoreList || 0 == scoreList.size()) {
             sb.append("您还没有玩过猜数字游戏！").append("\n");
-            sb.append("请输入n（n ≥ 4）个不重复的数字开始新的一局，例如：0269");
+            sb.append("请输入n（n ≥ 1）个不重复的数字开始新的一局，例如：0269");
         } else {
             sb.append("您的游戏战绩如下：").append("\n");
             for (UserScore score : scoreList) {
@@ -91,7 +91,7 @@ public class GuessNumberUtil {
                     sb.append("终止局数：").append(score.getCount()).append("\n");
                 }
             }
-            sb.append("请输入n（n ≥ 4）个不重复的数字开始新的一局，例如：0269");
+            sb.append("请输入n（n ≥ 1）个不重复的数字开始新的一局，例如：0269");
         }
         return sb.toString();
     }
@@ -106,11 +106,11 @@ public class GuessNumberUtil {
         NumberGame game = gameDao.getLastGame(openId);
         if (null == game) {
             sb.append("您还没有玩过猜数字游戏！").append("\n");
-            sb.append("请输入n（n ≥ 4）个不重复的数字开始新的一局，例如：0269");
+            sb.append("请输入n（n ≥ 1）个不重复的数字开始新的一局，例如：0269");
         }else{
             gameDao.updateGame(game.getId(), "3", DateUtil.getCurrentDate());
             sb.append("您已结束本局猜数字游戏！").append("\n");
-            sb.append("请输入n（n ≥ 4）个不重复的数字开始新的一局，例如：0269");
+            sb.append("请输入n（n ≥ 1）个不重复的数字开始新的一局，例如：0269");
         }
         return sb.toString();
     }
@@ -180,14 +180,14 @@ public class GuessNumberUtil {
         if (guessResult.equals(content.length()+"A0B")) {
             sb.append("正确答案：").append(gameAnswer).append("\n");
             sb.append("恭喜您猜对了！[强]").append("\n");
-            sb.append("重新输入4个不重复的数字开始新的一局。");
+            sb.append("重新输入n（n ≥ 1）个不重复的数字开始新的一局。");
             gameDao.updateGame(gameId, "1", DateUtil.getCurrentDate());
         }
         // 10回合仍没猜对
         else if (roundList.size() >= 10) {
             sb.append("正确答案：").append(gameAnswer).append("\n");
             sb.append("唉，10回合都没猜出来，本局结束！[流泪]").append("\n");
-            sb.append("重新输入4个不重复的数字开始新的一局。");
+            sb.append("重新输入n（n ≥ 1）个不重复的数字开始新的一局。");
             gameDao.updateGame(gameId, "2", DateUtil.getCurrentDate());
         }
         // 本回合没猜对
