@@ -1,10 +1,12 @@
 package com.product.guessNumber.dao;
 
 import com.product.guessNumber.po.NumberGame;
-import com.product.guessNumber.vo.UserScore;
+import com.product.guessNumber.vo.UserScoreVO;
 import com.weixin.dao.BaseDao;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by harrysa66 on 2016/1/7.
@@ -74,13 +76,13 @@ public class NumberGameDao extends BaseDao {
      * @param openId
      * @return
      */
-    public List<UserScore> getScoreByOpenId(String openId) {
-        List<UserScore> scoreList = new ArrayList<UserScore>();
+    public List<UserScoreVO> getScoreByOpenId(String openId) {
+        List<UserScoreVO> scoreList = new ArrayList<UserScoreVO>();
         // ¸ù¾ÝidÉýÐòÅÅÐò
         Object[] params = new Object[1];
         params[0] = openId;
         String sql = "select game_status as gameStatus,count(*) as count from number_game where open_id=? group by game_status order by game_status asc";
-        scoreList = executeQuery(sql,UserScore.class,params);
+        scoreList = executeQuery(sql,UserScoreVO.class,params);
         return scoreList;
     }
 }

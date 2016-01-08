@@ -4,7 +4,7 @@ import com.product.guessNumber.dao.NumberGameDao;
 import com.product.guessNumber.dao.NumberGameRoundDao;
 import com.product.guessNumber.po.NumberGame;
 import com.product.guessNumber.po.NumberGameRound;
-import com.product.guessNumber.vo.UserScore;
+import com.product.guessNumber.vo.UserScoreVO;
 import com.weixin.util.DateUtil;
 import com.weixin.util.MessageUtil;
 
@@ -74,13 +74,13 @@ public class GuessNumberUtil {
      */
     private static String getUserScore(String openId) {
         StringBuffer sb = new StringBuffer();
-        List<UserScore> scoreList = gameDao.getScoreByOpenId(openId);
+        List<UserScoreVO> scoreList = gameDao.getScoreByOpenId(openId);
         if (null == scoreList || 0 == scoreList.size()) {
             sb.append("您还没有玩过猜数字游戏！").append("\n");
             sb.append("请输入n（n ≥ 1）个不重复的数字开始新的一局，例如：0269");
         } else {
             sb.append("您的游戏战绩如下：").append("\n");
-            for (UserScore score : scoreList) {
+            for (UserScoreVO score : scoreList) {
                 if (score.getGameStatus().equals("0")) {
                     sb.append("游戏中：").append(score.getCount()).append("\n");
                 } else if (score.getGameStatus().equals("1")) {
@@ -109,6 +109,7 @@ public class GuessNumberUtil {
             sb.append("请输入n（n ≥ 1）个不重复的数字开始新的一局，例如：0269");
         }else{
             gameDao.updateGame(game.getId(), "3", DateUtil.getCurrentDate());
+            sb.append("本局游戏的正确答案为：").append(game.getGameAnswer()).append("！\n");
             sb.append("您已结束本局猜数字游戏！").append("\n");
             sb.append("请输入n（n ≥ 1）个不重复的数字开始新的一局，例如：0269");
         }
