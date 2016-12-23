@@ -1,22 +1,12 @@
 package com.weixin.util;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.text.ParseException;
-
+import com.weixin.constant.KeyConstant;
+import com.weixin.po.AccessToken;
+import com.weixin.po.menu.Button;
+import com.weixin.po.menu.ClickButton;
+import com.weixin.po.menu.Menu;
+import com.weixin.po.menu.ViewButton;
 import net.sf.json.JSONObject;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -25,13 +15,13 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import com.weixin.constant.KeyConstant;
-import com.weixin.po.AccessToken;
-import com.weixin.po.User;
-import com.weixin.po.menu.Button;
-import com.weixin.po.menu.ClickButton;
-import com.weixin.po.menu.Menu;
-import com.weixin.po.menu.ViewButton;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.text.ParseException;
 
 public class WeiXinUtil {
 	
@@ -73,7 +63,7 @@ public class WeiXinUtil {
 	
 	/**
 	 * POST请求
-	 * @param url
+	 * @param url 地址
 	 * @param outStr
 	 * @return
 	 * @throws ParseException
