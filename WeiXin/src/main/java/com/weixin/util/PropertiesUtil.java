@@ -22,7 +22,6 @@ public class PropertiesUtil {
             properties.load(inputStream);
             inputStream.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
