@@ -67,7 +67,7 @@ public class UserDao extends BaseDao{
 	
 	public static void main(String[] args) {
 		UserDao userDao = new UserDao();
-		User user = userDao.getUser("omXV9wgGac_mRs_WBUffy6-_z8WU");
+		User user = userDao.getUser("oldoPuHWQwhky5mtvuS8LXKDP-NE");
 		System.out.println(user.getUsername());
 	}
 
