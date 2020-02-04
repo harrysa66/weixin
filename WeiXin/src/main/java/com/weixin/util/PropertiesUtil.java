@@ -1,5 +1,6 @@
 package com.weixin.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -7,23 +8,37 @@ import java.util.Properties;
  * Created by harrysa66 on 2020/2/4.
  */
 public class PropertiesUtil {
-    /**
-     * 根据key读取value
-     * @param filePath
-     * @param key
-     * @return
-     */
-    public static String readValue(String filePath,String key) {
-        Properties props = new Properties();
+    //读取配置文件（属性文件）的工具类
+    private static PropertiesUtil propertiesUtil;
+    private static Properties properties;
+    //这里必须为private，避免外部new一个PropertiesUtil对象
+    private PropertiesUtil() {
+        String configFil = "message.properties";
+        properties = new Properties();
+        //getClassLoader()返回类加载器
+        //getResourceAsStream(configFil)返回InputStream对象
+        InputStream inputStream = PropertiesUtil.class.getClassLoader().getResourceAsStream(configFil);
         try {
-            InputStream in = Object.class.getResourceAsStream(filePath);
-            props.load(in);
-            String value = props.getProperty (key);
-            System.out.println(key+"----"+value);
-            return value;
-        } catch (Exception e) {
+            properties.load(inputStream);
+            inputStream.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
-            return null;
         }
+    }
+
+    //通过单列模式设置实例化的个数
+    //对外开放的接口
+    public static PropertiesUtil getInstance() {
+        if (propertiesUtil == null) {
+            propertiesUtil = new PropertiesUtil();
+            return propertiesUtil;
+        }
+        return propertiesUtil;
+    }
+
+    //通过key获取对应的value值
+    public String getString(String key) {
+        return properties.getProperty(key);
     }
 }

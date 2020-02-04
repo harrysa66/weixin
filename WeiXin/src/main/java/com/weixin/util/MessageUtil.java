@@ -158,7 +158,7 @@ public class MessageUtil {
 		newsMessage.setMsgType(MessageUtil.MESSAGE_NEWS);
 		newsMessage.setCreateTime(DateUtil.getCurrentDate().getTime());
 		newsMessage.setArticleCount(newsList.size());
-		newsMessage.setArticles(newsList);
+ 		newsMessage.setArticles(newsList);
 		message = newsMessageToXml(newsMessage);
 		return message;
 	}
@@ -205,8 +205,8 @@ public class MessageUtil {
 	 */
 	public static String menuText(){
 		StringBuffer sb = new StringBuffer();
-		sb.append("欢迎您的关注，在这里您可以与机器人小R进行聊天或者查阅生活服务信息，请按照菜单提示进行操作：\n\n");
-		sb.append("1、聊天\n");
+		sb.append("欢迎您的关注，请按照菜单提示进行操作，如果遇到问题请发送邮件至harrysa66@163.com：\n\n");
+		sb.append("1、机器人聊天\n");
 		sb.append("2、查询天气\n");
 		sb.append("3、查询图文天气\n");
 		sb.append("4、查询快递（不支持语音）\n");
@@ -214,7 +214,7 @@ public class MessageUtil {
 		sb.append("6、翻译\n");
 		sb.append("7、周边搜索\n");
 		sb.append("8、猜数字游戏\n\n");
-		//sb.append("7、查询交通\n\n");
+		sb.append("9、查询交通\n\n");
 		sb.append("回复?调出此菜单，更多功能敬请期待");
 		return sb.toString();
 	}
@@ -774,6 +774,46 @@ public class MessageUtil {
 			e.printStackTrace();
 		}
 		return message;
+	}
+
+	/**
+	 * 失效菜单的返回信息
+	 * @return
+	 */
+	public static String invalidMenuMessage(){
+		StringBuffer sb = new StringBuffer();
+		sb.append("此功能已失效，请使用其他功能。");
+		return sb.toString();
+	}
+
+	/**
+	 * 提示正确信息的返回信息
+	 * @return
+	 */
+	public static String correctTipsMessage(){
+		StringBuffer sb = new StringBuffer();
+		sb.append("请按照菜单提示发送正确信息，回复?调出主菜单！");
+		return sb.toString();
+	}
+
+	/**
+	 * 不支持消息的返回信息
+	 * @return
+	 */
+	public static String notSupportMessage(){
+		StringBuffer sb = new StringBuffer();
+		sb.append("暂不支持该信息！");
+		return sb.toString();
+	}
+
+	/**
+	 * 出现问题的返回信息
+	 * @return
+	 */
+	public static String problemMessage(){
+		StringBuffer sb = new StringBuffer();
+		sb.append("出现问题，请重新关注此微信号！");
+		return sb.toString();
 	}
 	
 	/**
