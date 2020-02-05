@@ -213,7 +213,7 @@ public class MessageUtil {
 		sb.append("5、查询景点\n");
 		sb.append("6、翻译\n");
 		sb.append("7、周边搜索\n");
-		sb.append("8、猜数字游戏\n\n");
+		sb.append("8、猜数字游戏\n");
 		sb.append("9、查询交通\n\n");
 		sb.append("回复?调出此菜单，更多功能敬请期待");
 		return sb.toString();
@@ -504,7 +504,46 @@ public class MessageUtil {
 	 */
 	public static String transMenu(){
 		StringBuffer sb = new StringBuffer();
-		sb.append("进入翻译模式，请输入“需翻译的内容”进行翻译，例如“家庭”，“family”，“我们是一家人”，“we are family”\n\n");
+		sb.append("进入翻译模式，请输入“目标语言”+“=”+“需翻译的内容”进行翻译，例如“en=家庭”，“zh=family”，“en=我们是一家人”，“zh=we are family”\n\n");
+		sb.append("目标语言清单请输入“-help”进行查询\n\n");
+		sb.append("回复?退出此模式并调出主菜单");
+		return sb.toString();
+	}
+
+	/**
+	 * 翻译语言列表
+	 * @return
+	 */
+	public static String transLanguage(){
+		StringBuffer sb = new StringBuffer();
+		sb.append("zh=中文\n");
+		sb.append("en=英语\n");
+		sb.append("yue=粤语\n");
+		sb.append("wyw=文言文\n");
+		sb.append("jp=日语\n");
+		sb.append("kor=韩语\n");
+		sb.append("fra=法语\n");
+		sb.append("spa=西班牙语\n");
+		sb.append("th=泰语\n");
+		sb.append("ara=阿拉伯语\n");
+		sb.append("ru=俄语\n");
+		sb.append("pt=葡萄牙语\n");
+		sb.append("de=德语\n");
+		sb.append("it=意大利语\n");
+		sb.append("el=希腊语\n");
+		sb.append("nl=荷兰语\n");
+		sb.append("pl=波兰语\n");
+		sb.append("bul=保加利亚语\n");
+		sb.append("est=爱沙尼亚语\n");
+		sb.append("dan=丹麦语\n");
+		sb.append("fin=芬兰语\n");
+		sb.append("cs=捷克语\n");
+		sb.append("rom=罗马尼亚语\n");
+		sb.append("slo=斯洛文尼亚语\n");
+		sb.append("swe=瑞典语\n");
+		sb.append("hu=匈牙利语\n");
+		sb.append("cht=繁体中文\n");
+		sb.append("vie=越南语\n\n");
 		sb.append("回复?退出此模式并调出主菜单");
 		return sb.toString();
 	}
@@ -517,7 +556,11 @@ public class MessageUtil {
 	public static String transInfo(String source){
 		String message = null;
 		try {
-			message = TransUtil.translate(source);
+			if (source.equals("-help")){
+				message = MessageUtil.transLanguage();
+			} else {
+				message = TransUtil.translate(source);
+			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
