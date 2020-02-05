@@ -33,9 +33,11 @@ public class WeixinServlet extends HttpServlet{
 		String timestamp = req.getParameter("timestamp");
 		String nonce = req.getParameter("nonce");
 		String echostr = req.getParameter("echostr");
-		PrintWriter out = resp.getWriter();
+		log.info("request params -----> signature["+signature+"], timestamp["+timestamp+"], nonce["+nonce+"], echostr["+echostr+"]");
+		//PrintWriter out = resp.getWriter();
 		if(CheckUtil.checkSignature(signature, timestamp, nonce)){
-			out.print(echostr);
+			//out.print(echostr);
+			resp.getOutputStream().println(echostr);
 		}
 		
 	}
