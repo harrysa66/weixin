@@ -11,6 +11,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -50,8 +52,10 @@ public class WeiXinUtil {
 	 */
 	public static JSONObject doGetStr(String url) throws IOException{
 		DefaultHttpClient client = new DefaultHttpClient();
+		client.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
 		HttpGet httpGet = new HttpGet(url);
 		JSONObject jsonObject = null;
+		//DefaultHttpParams.getDefaultParams().setParameter("http.protocol.cookie-policy", CookiePolicy.BROWSER_COMPATIBILITY);
 		HttpResponse httpResponse = client.execute(httpGet);
 		HttpEntity entity = httpResponse.getEntity();
 		if(entity != null){

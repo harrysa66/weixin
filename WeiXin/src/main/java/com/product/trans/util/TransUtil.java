@@ -26,10 +26,10 @@ public class TransUtil {
 	public static String translate(String source) throws ParseException, IOException{
 		String to = "zh";
 		if (source.contains("=")){
-			to = source.split("=")[0];
+			to = source.split("=")[0].toLowerCase();
 			source = source.split("=")[1];
 		} else {
-			if (ChineseHelper.hasChinese(source)){
+			if (ChineseHelper.hasChineseByRange(source)){
 				to = "en";
 			}
 		}
